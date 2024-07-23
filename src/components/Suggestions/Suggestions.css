@@ -1,0 +1,22 @@
+.suggestion-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  position: relative;
+  padding: 12px;
+  color: rgb(244, 244, 244);
+  border: 1px solid rgb(39, 39, 42);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.suggestion-card:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.suggestion-card:active {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(0.98);
+}
