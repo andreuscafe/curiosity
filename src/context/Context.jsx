@@ -28,7 +28,7 @@ const ContextProvider = (props) => {
     const updatedHistory = [...prevPrompts, { role: "user", content: prompt }];
 
     const briefPrompt = `${prompt}\n\nNota: Por favor, responde de manera breve y concisa, limitando la respuesta a 200 caracteres. Si necesitas más espacio, pregunta '¿Quieres saber más?' al final. No añadas "¿Queres saber más?" si la respuesta es corta.`;
-    const briefPrompt2 = `${prompt}\n\nNota2: Quiero que ademas de responderme, me des una explicacion de porque la respuesta es correcta o incorrecta. Si necesitas mas espacio, pregunta '¿Quieres saber más?' al final. No añadas "¿Queres saber más?" si la respuesta es corta.`;
+    const briefPrompt2 = `${prompt}\n\nNota2: Quiero que ademas de responderme, me des una explicacion de porque la respuesta es correcta o incorrecta. Si necesitas mas espacio, pregunta '¿Queres saber más?' al final. No añadas "¿Queres saber más?" si la respuesta es corta.`;
     let responses = [];
 
     try {

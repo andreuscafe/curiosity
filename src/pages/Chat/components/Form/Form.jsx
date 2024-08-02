@@ -1,24 +1,28 @@
-import React, { useState, useRef, useEffect, useContext } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaStarOfLife } from "react-icons/fa";
-import { Context } from "../../context/Context";
+import useStore from "../../../../store/useStore";
 import "./Form.css";
 
-const Form = ({ setMessages }) => {
+const Form = () => {
   const [visible, setVisible] = useState(false);
-  const [text, setText] = useState("");
   const formRef = useRef(null);
   const buttonRef = useRef(null);
-  const { onSent } = useContext(Context);
+
+  const input = useStore((state) => state.input);
+  const setInput = useStore((state) => state.setInput);
+  const addMessage = useStore((state) => state.addMessage);
+  const onSent = useStore((state) => state.onSent);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!text.length) return;
+    if (!input.length) return;
 
-    setMessages(text);
-
-    setText("");
+    addMessage({ role: "user", content: input });
+    setInput("");
     setVisible(false);
+
+    await onSent(input);
   };
 
   useEffect(() => {
@@ -75,17 +79,23 @@ const Form = ({ setMessages }) => {
             <div className="form-background">
               <div className="form-content">
                 <textarea
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
                   placeholder="Escribí tu mensaje acá..."
                   className="h-24 w-full resize-none rounded p-3 text-sm text-zinc-50 placeholder-zinc-500 caret-zinc-50 focus:outline-0"
                 />
-                <button
-                  type="submit"
-                  className="mt-2 w-full rounded bg-indigo-500 px-1.5 py-1 text-xs text-indigo-50 transition-colors hover:bg-indigo-500"
-                >
-                  Enviar
-                </button>
+                <div className="flex justify-between items-center">
+                  <button
+                    type="submit"
+                    className="bg-[#292929] border-2 border-[#3e3e3e] rounded-lg text-white px-6 py-3 text-base hover:border-[#fff] cursor-pointer transition"
+                  >
+                    Enviar
+                  </button>
+
+                  <button className="bg-[#292929] border-2 border-[#3e3e3e] rounded-lg text-white px-6 py-3 text-base hover:border-[#fff] cursor-pointer transition">
+                    Board
+                  </button>
+                </div>
               </div>
             </div>
           </motion.form>

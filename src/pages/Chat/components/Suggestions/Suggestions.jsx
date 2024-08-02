@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import useStore from "../../../../store/useStore";
 
-const Suggestions = ({ suggestions = [] }) => {
+const Suggestions = () => {
+  const suggestions = useStore((state) => state.suggestions);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
 
@@ -31,7 +33,9 @@ const Suggestions = ({ suggestions = [] }) => {
               className="suggestion-card w-1/3 p-3 rounded bg-zinc-900 text-white transition-colors hover:bg-zinc-800"
               onClick={() => handleSuggestionClick(suggestion)}
             >
-              {suggestion.length > 50 ? suggestion.substring(0, 47) + "..." : suggestion}
+              {suggestion.length > 50
+                ? suggestion.substring(0, 47) + "..."
+                : suggestion}
             </button>
           ))}
         </motion.div>
@@ -52,13 +56,14 @@ const Suggestions = ({ suggestions = [] }) => {
             exit={{ scale: 0.8 }}
             onClick={(e) => e.stopPropagation()}
           >
+            <h2 className="text-xl font-bold mb-4">Suggested Response</h2>
+            <p>{modalContent}</p>
             <button
-              className="absolute top-2 right-2 text-gray-500"
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
               onClick={handleCloseModal}
             >
-              &times;
+              X
             </button>
-            <p>{modalContent}</p>
           </motion.div>
         </motion.div>
       )}
