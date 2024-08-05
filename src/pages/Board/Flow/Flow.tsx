@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from "react";
 import ReactFlow, { MiniMap, Controls, Background } from "reactflow";
 import "reactflow/dist/style.css";
 import "tailwindcss/tailwind.css";
-import QuestionNode from "./QuestionNode";
+import PromptNode from "./PromptNode";
 import useStore from "../../../store/useStore";
 import "./custom.css";
 
@@ -14,26 +14,19 @@ const Flow = () => {
   const onConnect = useStore((state) => state.onConnect);
   const addEdge = useStore((state) => state.addEdge);
 
-  
   const nodeTypes = useMemo(
     () => ({
-      question: QuestionNode,
+      prompt: PromptNode
     }),
     []
   );
 
   useEffect(() => {
     setTimeout(() => {
-      console.log("hola");
-      addEdge( {
+      addEdge({
         source: "node-1",
-        target: "node-2",
-      })
-      addEdge( {
-        source: "node-2",
-        target: "node-3",
-        
-      })
+        target: "node-2"
+      });
     }, 3000);
   }, []);
 

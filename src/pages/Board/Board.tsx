@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Navbar from "./Navbar/Navbar";
 import { AnimatePresence, motion } from "framer-motion";
 import { TfiHelpAlt } from "react-icons/tfi";
-import Flow from "./Flow/Flow.jsx";
+import Flow from "./Flow/Flow.js";
 
 const Board = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,15 +32,15 @@ const Board = () => {
               <TfiHelpAlt className="text-white/10 rotate-12 text-[250px] absolute z-0 -top-24 -left-24 strong" />
               <div className="relative z-20">
                 <div className="bg-white w-16 h-16 mb-2 rounded-full text-3xl text-indigo-600 grid place-items-center mx-auto">
-                  <TfiHelpAlt />
+                  <TfiHelpAlt className="m-0" />
                 </div>
                 <h3 className="text-3xl font-bold text-center mb-2">
                   Breve explicacion de como se usa el board.
                 </h3>
                 <p className="text-center mb-6">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Id
-                  Soy un lorem bien loco
-                  aperiam vitae, sapiente ducimus eveniet in velit.
+                  Soy un lorem bien loco aperiam vitae, sapiente ducimus eveniet
+                  in velit.
                 </p>
                 <div className="flex gap-2">
                   <button

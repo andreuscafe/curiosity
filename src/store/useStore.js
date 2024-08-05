@@ -7,47 +7,50 @@ const useStore = create((set, get) => ({
   nodes: [
     {
       id: "node-1",
-      type: "question",
+      type: "prompt",
       position: { x: 0, y: 0 },
-      data: { label: "QuestionNode 1" },
+      data: { label: "QuestionNode 1" }
     },
     {
       id: "node-2",
-      type: "output",
-      targetPosition: "left",
-      sourcePosition: "right",
-      position: { x: 200, y: 0 },
-      data: { label: "node 2" },
+      type: "prompt",
+      position: { x: 300, y: -100 },
+      data: { label: "node 2" }
     },
     {
       id: "node-3",
-      type: "output",
-      targetPosition: "left",
-      position: { x: 400, y: 0 },
-      data: { label: "sub-node 1" },
+      type: "prompt",
+      position: { x: 300, y: 0 },
+      data: { label: "sub-node 1" }
     },
+    {
+      id: "node-4",
+      type: "prompt",
+      position: { x: 300, y: 100 },
+      data: { label: "sub-node 1" }
+    }
   ],
   edges: [],
 
   addEdge: (params) => {
     set({
-      edges: addEdge(params, get().edges),
+      edges: addEdge(params, get().edges)
     });
   },
 
   onNodesChange: (changes) => {
     set({
-      nodes: applyNodeChanges(changes, get().nodes),
+      nodes: applyNodeChanges(changes, get().nodes)
     });
   },
   onEdgesChange: (changes) => {
     set({
-      edges: applyEdgeChanges(changes, get().edges),
+      edges: applyEdgeChanges(changes, get().edges)
     });
   },
   onConnect: (params) => {
     set({
-      edges: addEdge(params, get().edges),
+      edges: addEdge(params, get().edges)
     });
   },
 
@@ -60,7 +63,7 @@ const useStore = create((set, get) => ({
   fullResponse: "",
   addMessage: (message) =>
     set((state) => ({
-      messages: [...state.messages, { ...message, id: Date.now() }],
+      messages: [...state.messages, { ...message, id: Date.now() }]
     })),
 
   setSuggestions: (suggestions) => set({ suggestions }),
@@ -72,14 +75,14 @@ const useStore = create((set, get) => ({
   onSent: async (prompt) => {
     set({ loading: true, showResult: true, suggestions: [] });
     const {
-      messages,
+      // messages,
       addMessage,
       setSuggestions,
       setLoading,
       setInput,
-      setFullResponse,
+      setFullResponse
     } = get();
-    const updatedHistory = [...messages, { role: "user", content: prompt }];
+    // const updatedHistory = [...messages, { role: "user", content: prompt }];
 
     try {
       const response = await runChat(prompt);
@@ -108,13 +111,13 @@ const useStore = create((set, get) => ({
       console.error("Error occurred in onSent:", error);
       addMessage({
         role: "assistant",
-        content: "An error occurred while fetching the response.",
+        content: "An error occurred while fetching the response."
       });
     } finally {
       setLoading(false);
       setInput("");
     }
-  },
+  }
 }));
 
 export default useStore;

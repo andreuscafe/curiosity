@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Handle } from 'reactflow';
-import 'tailwindcss/tailwind.css';
+import React, { useState, useRef, useEffect } from "react";
+import { Handle, Position } from "reactflow";
+import "tailwindcss/tailwind.css";
 
-const QuestionNode = ({ id, data }) => {
+const PromptNode = ({ id, data }) => {
+  console.log("PromptNode -> data", data);
+
   const initialText = "¿Qué te gustaría saber?";
   const [text, setText] = useState(initialText);
   const [isEditing, setIsEditing] = useState(false);
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const isPlaceholder = text === initialText;
   const [emoji, setEmoji] = useState("✨");
 
@@ -21,7 +23,7 @@ const QuestionNode = ({ id, data }) => {
 
   const toggleEditMode = () => setIsEditing(!isEditing);
 
-  //loader "tipo cargando la respuesta" - "🤔" 
+  //loader "tipo cargando la respuesta" - "🤔"
   const handleSave = () => {
     setIsEditing(false);
     if (text === "") {
@@ -69,12 +71,12 @@ const QuestionNode = ({ id, data }) => {
       </span>
       <Handle
         type="source"
-        position="right"
+        position={"right" as Position}
         id={`${id}-right`}
-        style={{ top: '50%', background: '#555' }}
+        style={{ top: "50%", background: "#555" }}
       />
     </div>
   );
 };
 
-export default QuestionNode;
+export default PromptNode;
