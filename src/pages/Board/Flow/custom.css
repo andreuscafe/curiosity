@@ -1,0 +1,54 @@
+/* container controles */
+.react-flow__controls {
+  box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.08); 
+  background-color: #242424;
+  border-radius: 0.375rem;
+  padding: 0.5rem;
+}
+
+/* botones */
+.react-flow__controls-button {
+  border: none;
+  background: #242424; 
+  border-bottom: 1px solid #a0a1a245;
+  box-sizing: content-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  padding: 5px;
+  transition: background 0.2s ease;
+}
+
+/* hover */
+.react-flow__controls-button:hover {
+  background: #404040; /* bg-gray-600 */
+}
+
+/* iconos de los botones */
+.react-flow__controls-button svg {
+  width: 100%;
+  max-width: 12px;
+  max-height: 12px;
+  fill: #f1f1f1;
+}
+
+/* botones de control deshabilitados */
+.react-flow__controls-button:disabled {
+  pointer-events: none;
+}
+
+.react-flow__controls-button:disabled svg {
+  fill-opacity: 0.4;
+}
+
+
+/* modo pro activado */
+.react-flow__attribution {
+  display: none;
+}

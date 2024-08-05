@@ -2,16 +2,15 @@ import React, { useState } from "react";
 import Navbar from "./Navbar/Navbar";
 import { AnimatePresence, motion } from "framer-motion";
 import { TfiHelpAlt } from "react-icons/tfi";
+import Flow from "./Flow/Flow.jsx";
 
 const Board = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="w-full h-screen relative">
+    <div className="">
       <Navbar openModal={() => setIsOpen(true)} />
-      <div className="flex items-center justify-center h-full bg-black text-white">
-        <h1 className="text-3xl font-bold">en construccion👷🏻</h1>
-      </div>
+      <Flow />
 
       {/* Modal */}
       <AnimatePresence>
