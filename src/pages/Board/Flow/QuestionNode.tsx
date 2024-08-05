@@ -2,10 +2,10 @@ import React, { useState, useRef, useEffect } from "react";
 import { Handle, Position } from "reactflow";
 import "tailwindcss/tailwind.css";
 
-const PromptNode = ({ id, data }) => {
-  console.log("PromptNode -> data", data);
+const QuestionNode = ({ id, data }) => {
+  console.log("QuestionNode -> data", data);
 
-  const initialText = "¿Qué te gustaría saber?";
+  const initialText = data.label;
   const [text, setText] = useState(initialText);
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -39,7 +39,7 @@ const PromptNode = ({ id, data }) => {
   }, [text, isEditing]);
 
   return (
-    <div className="p-2 bg-[#141414] shadow-md rounded-2xl flex items-center space-x-4 border border-[#444444] text-sm">
+    <div className="p-2 bg-[#141414] shadow-md rounded-2xl flex items-center border border-[#444444] text-sm">
       {isEditing ? (
         <input
           type="text"
@@ -70,6 +70,14 @@ const PromptNode = ({ id, data }) => {
         {emoji}
       </span>
       <Handle
+        type="target"
+        position={"left" as Position}
+        id={`${id}-target`}
+        style={{ top: "50%", background: "#000", borderColor: "#aaa" }}
+        // isValidConnection={(connection) => connection.source === source}
+        onConnect={(params) => console.log("handle onConnect", params)}
+      />
+      <Handle
         type="source"
         position={"right" as Position}
         id={`${id}-source`}
@@ -79,4 +87,4 @@ const PromptNode = ({ id, data }) => {
   );
 };
 
-export default PromptNode;
+export default QuestionNode;

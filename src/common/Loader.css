@@ -1,9 +1,9 @@
 :root {
   --duration: 3s;
-  --timing: cubic-bezier(.5,0,0,1);
+  --timing: cubic-bezier(0.5, 0, 0, 1);
   --background: #000000;
   --foreground: #ffffff;
-  --delay: 3s; 
+  --delay: 3s;
 }
 
 .loader-container {
@@ -13,7 +13,7 @@
   justify-content: center;
   height: 100vh;
   background: var(--background);
-  position: relative; 
+  position: relative;
 }
 
 svg {
@@ -21,22 +21,29 @@ svg {
 }
 
 svg path {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
+  /* stroke-dasharray: 1000;
+  stroke-dashoffset: 1000; */
   stroke: var(--foreground);
 }
 
 .loader-logo path {
-  animation: loader-logo var(--duration) var(--timing) forwards, loader-logo-reverse var(--duration) var(--timing) var(--delay) forwards;
+  animation: loader-logo var(--duration) var(--timing) forwards,
+    loader-logo-reverse var(--duration) var(--timing) var(--delay) forwards;
 }
 
 @keyframes loader-logo {
-  100% { stroke-dashoffset: 0; }
+  100% {
+    stroke-dashoffset: 0;
+  }
 }
 
 @keyframes loader-logo-reverse {
-  0% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: 1000; }
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: 1000;
+  }
 }
 
 .loader-text {

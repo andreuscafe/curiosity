@@ -45,30 +45,49 @@ const useStore = create<Store>((set, get) => ({
       id: "node-1",
       type: "prompt",
       position: { x: 0, y: 0 },
-      data: { label: "QuestionNode 1" }
+      data: { label: "¿Qué te gustaría saber?" }
     },
     {
       id: "node-2",
-      type: "prompt",
+      type: "question",
       position: { x: 300, y: -100 },
-      data: { label: "node 2" }
+      data: { label: "Pregunta 1" },
+      parentId: "node-1"
     },
     {
       id: "node-3",
-      type: "prompt",
+      type: "question",
       position: { x: 300, y: 0 },
-      data: { label: "sub-node 1" }
+      data: { label: "Pregunta 2" },
+      parentId: "node-1"
     },
     {
       id: "node-4",
-      type: "prompt",
+      type: "question",
       position: { x: 300, y: 100 },
-      data: { label: "sub-node 1" }
+      data: { label: "Pregunta 3" },
+      parentId: "node-1"
+    },
+    {
+      id: "node-5",
+      type: "question",
+      position: { x: 200, y: -50 },
+      data: { label: "Pregunta 4" },
+      parentId: "node-2"
+    },
+    {
+      id: "node-6",
+      type: "question",
+      position: { x: 200, y: 50 },
+      data: { label: "Pregunta 5" },
+      parentId: "node-2"
     }
   ],
   edges: [],
 
   addEdge: (params) => {
+    console.log("addEdge -> params", params);
+
     set({
       edges: addEdge(params, get().edges) as Edge[]
     });
