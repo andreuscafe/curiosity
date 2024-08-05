@@ -16,6 +16,7 @@ type Store = {
   nodes: Node[];
   edges: Edge[];
   addEdge: (params: Edge) => void;
+  addNode: (params: Node) => void;
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
   onConnect: (params: Edge) => void;
@@ -90,6 +91,12 @@ const useStore = create<Store>((set, get) => ({
 
     set({
       edges: addEdge(params, get().edges) as Edge[]
+    });
+  },
+
+  addNode: (params) => {
+    set({
+      nodes: [...get().nodes, params]
     });
   },
 

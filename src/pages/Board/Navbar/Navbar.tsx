@@ -12,7 +12,7 @@ const RevealLink = ({ children, href }) => {
       href={href}
       className="relative block overflow-hidden whitespace-nowrap text-md font-semibold"
       style={{
-        lineHeight: 0.75,
+        lineHeight: 0.75
       }}
     >
       <div>
@@ -21,17 +21,17 @@ const RevealLink = ({ children, href }) => {
             variants={{
               initial: {
                 y: 0,
-                color: "gray",
+                color: "gray"
               },
               hovered: {
                 y: "-100%",
-                color: "white",
-              },
+                color: "white"
+              }
             }}
             transition={{
               duration: DURATION,
               ease: "easeInOut",
-              delay: STAGGER * i,
+              delay: STAGGER * i
             }}
             className="inline-block"
             key={i}
@@ -46,17 +46,17 @@ const RevealLink = ({ children, href }) => {
             variants={{
               initial: {
                 y: "100%",
-                color: "gray",
+                color: "gray"
               },
               hovered: {
                 y: 0,
-                color: "white",
-              },
+                color: "white"
+              }
             }}
             transition={{
               duration: DURATION,
               ease: "easeInOut",
-              delay: STAGGER * i,
+              delay: STAGGER * i
             }}
             className="inline-block"
             key={i}
@@ -71,7 +71,7 @@ const RevealLink = ({ children, href }) => {
 
 const Navbar = ({ openModal }) => {
   return (
-    <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-[#1a1a1a] bg-opacity-70 backdrop-blur-md rounded-lg shadow-md p-3 w-auto max-w-2xl flex items-center justify-between z-50 border border-gray-700">
+    <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-[#1a1a1a] bg-opacity-70 backdrop-blur-md rounded-2xl shadow-md p-3 w-auto max-w-2xl flex items-center justify-between z-50 border border-gray-700">
       <div className="flex items-center space-x-2">
         <div className="w-6 h-6 rounded-full overflow-hidden">
           <img src="src/assets/icon.svg" alt="Logo" />

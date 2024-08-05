@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Handle, Position } from "reactflow";
 import "tailwindcss/tailwind.css";
+import { motion } from "framer-motion";
 
 const QuestionNode = ({ id, data }) => {
   console.log("QuestionNode -> data", data);
@@ -39,7 +40,12 @@ const QuestionNode = ({ id, data }) => {
   }, [text, isEditing]);
 
   return (
-    <div className="p-2 bg-[#141414] shadow-md rounded-2xl flex items-center border border-[#444444] text-sm">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="p-2 bg-[#141414] shadow-md rounded-2xl flex items-center border border-[#444444] text-sm"
+    >
       {isEditing ? (
         <input
           type="text"
@@ -83,7 +89,7 @@ const QuestionNode = ({ id, data }) => {
         id={`${id}-source`}
         style={{ top: "50%", background: "#555" }}
       />
-    </div>
+    </motion.div>
   );
 };
 

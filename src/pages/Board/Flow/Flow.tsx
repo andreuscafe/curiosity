@@ -20,6 +20,7 @@ const Flow = () => {
   const onEdgesChange = useStore((state) => state.onEdgesChange);
   const onConnect = useStore((state) => state.onConnect);
   const addEdge = useStore((state) => state.addEdge);
+  const addNode = useStore((state) => state.addNode);
 
   const nodeTypes = useMemo(
     () => ({
@@ -52,6 +53,30 @@ const Flow = () => {
       addEdge({
         source: "node-2",
         target: "node-6"
+      } as Edge);
+
+      addNode({
+        id: "node-10",
+        type: "question",
+        position: { x: 200, y: -50 },
+        data: { label: "Dynamic Node 1" },
+        parentId: "node-6"
+      });
+      addNode({
+        id: "node-11",
+        type: "question",
+        position: { x: 200, y: 50 },
+        data: { label: "Dynamic Node 2" },
+        parentId: "node-6"
+      });
+
+      addEdge({
+        source: "node-6",
+        target: "node-10"
+      } as Edge);
+      addEdge({
+        source: "node-6",
+        target: "node-11"
       } as Edge);
     }, 1000);
   }, []);
