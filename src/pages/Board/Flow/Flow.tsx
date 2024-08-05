@@ -1,5 +1,11 @@
 import React, { useEffect, useMemo } from "react";
-import ReactFlow, { MiniMap, Controls, Background } from "reactflow";
+import ReactFlow, {
+  MiniMap,
+  Controls,
+  Background,
+  Edge,
+  OnConnect
+} from "reactflow";
 import "reactflow/dist/style.css";
 import "tailwindcss/tailwind.css";
 import PromptNode from "./PromptNode";
@@ -26,7 +32,7 @@ const Flow = () => {
       addEdge({
         source: "node-1",
         target: "node-2"
-      });
+      } as Edge);
     }, 3000);
   }, []);
 
@@ -37,7 +43,7 @@ const Flow = () => {
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
+        onConnect={onConnect as OnConnect}
         nodeTypes={nodeTypes}
         fitView
       >

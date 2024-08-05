@@ -5,6 +5,7 @@ import Home from "./pages/Chat/Home";
 import Loader from "./common/Loader";
 
 const App = () => {
+  // temporary disable loader
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
