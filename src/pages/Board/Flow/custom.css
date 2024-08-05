@@ -1,6 +1,6 @@
 /* container controles */
 .react-flow__controls {
-  box-shadow: 0 0 2px 1px rgba(255, 255, 255, 0.08); 
+  box-shadow: 0 0 1px 1px rgba(255, 255, 255, 0.08); 
   background-color: #242424;
   border-radius: 0.375rem;
   padding: 0.5rem;
@@ -36,6 +36,7 @@
   max-width: 12px;
   max-height: 12px;
   fill: #f1f1f1;
+  margin-top: 1rem;
 }
 
 /* botones de control deshabilitados */
@@ -51,4 +52,15 @@
 /* modo pro activado */
 .react-flow__attribution {
   display: none;
+}
+
+.loader {
+  border-top-color: transparent;
+  animation: spinner 1s linear infinite;
+}
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
 }
