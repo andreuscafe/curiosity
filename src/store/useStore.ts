@@ -19,6 +19,7 @@ type Store = {
   onNodesChange: (changes: NodeChange[]) => void;
   onEdgesChange: (changes: EdgeChange[]) => void;
   onConnect: (params: Edge) => void;
+  updateNodeType: (id: string, type: string, response: string) => void;
   messages: Message[];
   suggestions: string[];
   input: string;
@@ -31,7 +32,7 @@ type Store = {
   setShowResult: (showResult: boolean) => void;
   setInput: (input: string) => void;
   setFullResponse: (response: string) => void;
-  onSent: (prompt: string, nodeId: string) => Promise<string>; // Cambio aquí
+  onSent: (prompt: string, nodeId: string) => Promise<string>;
 };
 
 type Message = {
@@ -65,6 +66,28 @@ const useStore = create<Store>((set, get) => ({
   onConnect: (params: Edge | Connection) => {
     set({ edges: addEdge(params, get().edges) as Edge[] });
   },
+  updateNodeType: (id: string, newType: string, response: string) => {
+    set((state) => {
+      const updatedNodes = state.nodes.map((node) => {
+        if (node.id === id) {
+          return {
+            ...node,
+            type: newType,
+            data: {
+              ...node.data,
+              label: node.data.label,
+              response,
+              isCompleted: true,
+              isEditable: false, 
+            },
+          };
+        }
+        return node;
+      });
+      return { nodes: updatedNodes };
+    });
+  },
+
   // GEMINI
   messages: [],
   suggestions: [],
@@ -91,6 +114,7 @@ const useStore = create<Store>((set, get) => ({
       setInput,
       setFullResponse,
       addNode,
+      addEdge,
     } = get();
 
     try {
@@ -104,6 +128,7 @@ const useStore = create<Store>((set, get) => ({
 
       const additionalResponses: string[] = [];
       for (let i = 0; i < 3; i++) {
+        const newNodeId = `node-${Date.now()}-${i}`;
         const additionalResponse = await runChat(prompt + " related");
         const truncatedAdditionalResponse =
           additionalResponse.length > 200
@@ -111,11 +136,17 @@ const useStore = create<Store>((set, get) => ({
             : additionalResponse;
 
         addNode({
-          id: `node-${Date.now()}-${i}`,
+          id: newNodeId,
           type: "question",
           position: { x: 300, y: (i - 1) * 100 },
           data: { label: truncatedAdditionalResponse },
           parentId: nodeId,
+        });
+
+        addEdge({
+          id: `edge-${nodeId}-${newNodeId}`,
+          source: nodeId,
+          target: newNodeId,
         });
 
         additionalResponses.push(truncatedAdditionalResponse);

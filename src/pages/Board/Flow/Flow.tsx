@@ -4,7 +4,7 @@ import ReactFlow, {
   Controls,
   Background,
   Edge,
-  OnConnect
+  OnConnect,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import "tailwindcss/tailwind.css";
@@ -25,56 +25,27 @@ const Flow = () => {
   const nodeTypes = useMemo(
     () => ({
       prompt: PromptNode,
-      question: QuestionNode
+      question: QuestionNode,
     }),
     []
   );
 
   useEffect(() => {
     const initializeNodesAndEdges = () => {
-      console.log("Adding nodes and edges");
+      const nodeExists = (id) => nodes.some((node) => node.id === id);
+      const edgeExists = (source, target) =>
+        edges.some((edge) => edge.source === source && edge.target === target);
 
-      const nodeExists = (id) => nodes.some(node => node.id === id);
-      const edgeExists = (source, target) => edges.some(edge => edge.source === source && edge.target === target);
-
-      // Lista de nodos a agregar
-      const nodesToAdd = [
-        { id: "node-1", type: "prompt", position: { x: 0, y: 0 }, data: { label: "Node 1" } },
-        { id: "node-2", type: "prompt", position: { x: 200, y: 0 }, data: { label: "Node 2" } },
-        { id: "node-3", type: "prompt", position: { x: 400, y: 0 }, data: { label: "Node 3" } },
-        { id: "node-4", type: "prompt", position: { x: 600, y: 0 }, data: { label: "Node 4" } },
-        { id: "node-5", type: "prompt", position: { x: 800, y: 0 }, data: { label: "Node 5" } },
-        { id: "node-6", type: "prompt", position: { x: 1000, y: 0 }, data: { label: "Node 6" } },
-        { id: "node-10", type: "question", position: { x: 200, y: -50 }, data: { label: "Dynamic Node 1" }, parentId: "node-6" },
-        { id: "node-11", type: "question", position: { x: 200, y: 100 }, data: { label: "Dynamic Node 2" }, parentId: "node-6" },
-      ];
-
-      // Agregar nodos si no existen
-      nodesToAdd.forEach(node => {
-        if (!nodeExists(node.id)) {
-          addNode(node);
-        }
-      });
-
-      // Lista de aristas a agregar
-      const edgesToAdd = [
-        { source: "node-1", target: "node-2" },
-        { source: "node-1", target: "node-3" },
-        { source: "node-1", target: "node-4" },
-        { source: "node-2", target: "node-5" },
-        { source: "node-2", target: "node-6" },
-        { source: "node-6", target: "node-10" },
-        { source: "node-6", target: "node-11" },
-      ];
-
-      // Agregar aristas si no existen
-      edgesToAdd.forEach(edge => {
-        if (!edgeExists(edge.source, edge.target)) {
-          addEdge(edge as Edge);
-        }
-      });
+      if (!nodeExists("node-1")) {
+        console.log(addNode)
+        addNode({ id: "node-1", type: "prompt", position: { x: 0, y: 0 }, data: { label: "Node 1" } });
+      }
+      if (!edgeExists("node-1", "node-2")) {
+        addEdge({ id: "edge-1", source: "node-1", target: "node-2" });
+      }
     };
 
+    initializeNodesAndEdges();
   }, [addEdge, addNode, nodes, edges]);
 
   return (
@@ -88,7 +59,7 @@ const Flow = () => {
         nodeTypes={nodeTypes}
         fitView
         fitViewOptions={{
-          padding: 1.5
+          padding: 1.5,
         }}
       >
         <MiniMap

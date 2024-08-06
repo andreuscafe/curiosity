@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Handle, Position } from "reactflow";
-import "tailwindcss/tailwind.css";
 import useStore from "../../../store/useStore";
 
 interface PromptNodeProps {
@@ -12,13 +11,12 @@ interface PromptNodeProps {
 
 const PromptNode = ({ id, data }: PromptNodeProps) => {
   const initialText = "¿Qué te gustaría saber?";
-  const [text, setText] = useState<string>(data.label);
+  const [text, setText] = useState<string>(data.label || initialText);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isThinking, setIsThinking] = useState<boolean>(false);
   const [response, setResponse] = useState<string>("");
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const isPlaceholder = text === initialText;
   const [emoji, setEmoji] = useState<string>("✨");
   const { onSent, nodes } = useStore();
 
@@ -45,8 +43,8 @@ const PromptNode = ({ id, data }: PromptNodeProps) => {
     } else {
       setIsThinking(true);
       setIsCompleted(false);
-      const responseText = await onSent(text, id); 
-      setResponse(responseText); 
+      const responseText = await onSent(text, id);
+      setResponse(responseText);
       setIsThinking(false);
       setIsCompleted(true);
       setEmoji("✅");
@@ -56,63 +54,80 @@ const PromptNode = ({ id, data }: PromptNodeProps) => {
   useEffect(() => {
     if (isEditing && inputRef.current) {
       inputRef.current.style.width = "auto";
-      inputRef.current.style.width = `${Math.max(inputRef.current.scrollWidth, 50)}px`;
+      inputRef.current.style.width = `${Math.max(
+        inputRef.current.scrollWidth,
+        50
+      )}px`;
     }
   }, [text, isEditing]);
 
   useEffect(() => {
-    const mainNode = nodes.find((node) => node.id === id);
-    if (mainNode) {
-      setText(mainNode.data.label);
+    if (!isEditing) {
+      const mainNode = nodes.find((node) => node.id === id);
+      if (mainNode) {
+        setText(mainNode.data.label);
+      }
     }
-  }, [nodes, id]);
+  }, [nodes, id, isEditing]);
 
   return (
-    <div className="p-2 bg-[#141414] shadow-md rounded-2xl border border-[#444444] text-sm">
-      <div className="flex flex-col items-start space-y-2">
-        <div className="flex items-center space-x-4">
-          {isEditing ? (
-            <input
-              type="text"
-              value={text}
-              onChange={handleTextChange}
-              ref={inputRef}
-              className={`editable-input p-2 bg-transparent border-none outline-none ${
-                isPlaceholder ? "text-gray-500" : "text-white"
-              }`}
-              style={{ width: "auto" }}
-              onBlur={handleSave}
-              autoFocus
-            />
-          ) : (
-            <span
-              className={`m-2 ${
-                isPlaceholder ? "text-gray-500" : "text-white"
-              }`}
-              onDoubleClick={toggleEditMode}
-            >
-              {text}
-            </span>
-          )}
-          <span
-            className="edit-button p-2 text-blue-500 hover:text-blue-700 cursor-pointer"
-            onClick={toggleEditMode}
-          >
-            {emoji}
-          </span>
-          <Handle
-            type="source"
-            position={Position.Right}
-            id={`${id}-source`}
-            style={{ top: "50%", background: "#555" }}
-          />
+    <div className="relative p-2 bg-[#141414] shadow-md rounded-2xl border border-[#444444] text-sm flex flex-col items-start">
+      <div className="flex flex-col items-start space-y-2 max-w-xs w-full relative">
+        <div className="flex items-center space-x-2 w-full">
+          <div className="flex flex-grow items-center">
+            {isEditing ? (
+              <input
+                type="text"
+                value={text}
+                onChange={handleTextChange}
+                ref={inputRef}
+                className={`editable-input p-2 bg-transparent border-none outline-none ${
+                  text === initialText ? "text-gray-500" : "text-white"
+                }`}
+                style={{ width: "auto" }}
+                onBlur={handleSave}
+                autoFocus
+              />
+            ) : (
+              <span
+                className={`m-2 ${
+                  text === initialText ? "text-gray-500" : "text-white"
+                } break-words max-w-full`}
+                onDoubleClick={toggleEditMode}
+              >
+                {text}
+              </span>
+            )}
+          </div>
+          <div className="relative flex items-center justify-center w-6 h-6">
+            {isThinking ? (
+              <div className="animate-spin border-t-2 border-yellow-500 border-solid w-6 h-6 rounded-full"></div>
+            ) : (
+              <span
+                className="edit-button p-2 text-blue-500 hover:text-blue-700 cursor-pointer text-xs"
+                onClick={toggleEditMode}
+              >
+                {emoji}
+              </span>
+            )}
+          </div>
         </div>
-        {isCompleted && (
-          <div className="mt-2 p-2 bg-[#242424] rounded-md text-white">
+        {isCompleted && !isThinking && (
+          <div className="mt-2 p-2 bg-[#141414] rounded-md text-white text-xs text-justify">
             {response}
           </div>
         )}
       </div>
+      <Handle
+        type="source"
+        position={Position.Right}
+        id={`${id}-source`}
+        style={{
+          position: "absolute",
+          transform: "translateY(-50%)",
+          background: "#555",
+        }}
+      />
     </div>
   );
 };

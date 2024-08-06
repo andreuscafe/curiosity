@@ -62,10 +62,10 @@ const ContextProvider = (props) => {
         console.log(`Additional response ${i + 1}:`, additionalResponse);
 
         if (typeof additionalResponse === "string") {
-          if (additionalResponse.length > 200) {
+          if (additionalResponse.length > 300) {
             additionalResponse =
-              additionalResponse.substring(0, 190) + "... ¿Queres saber más?";
-          } else if (additionalResponse.length > 190) {
+              additionalResponse.substring(0, 290) + "... ¿Queres saber más?";
+          } else if (additionalResponse.length > 290) {
             additionalResponse += " ¿Queres saber más?";
           }
 
