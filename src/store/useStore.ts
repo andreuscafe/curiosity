@@ -20,6 +20,7 @@ type Store = {
   onEdgesChange: (changes: EdgeChange[]) => void;
   onConnect: (params: Edge) => void;
   updateNodeType: (id: string, type: string, response: string) => void;
+  updateNodeLabel: (id: string, label: string) => void;
   messages: Message[];
   suggestions: string[];
   input: string;
@@ -78,7 +79,24 @@ const useStore = create<Store>((set, get) => ({
               label: node.data.label,
               response,
               isCompleted: true,
-              isEditable: false, 
+              isEditable: false,
+            },
+          };
+        }
+        return node;
+      });
+      return { nodes: updatedNodes };
+    });
+  },
+  updateNodeLabel: (id: string, label: string) => {
+    set((state) => {
+      const updatedNodes = state.nodes.map((node) => {
+        if (node.id === id) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              label,
             },
           };
         }
@@ -118,28 +136,26 @@ const useStore = create<Store>((set, get) => ({
     } = get();
 
     try {
-      const response = await runChat(prompt);
+      const briefPrompt = `${prompt}\n\nNota: Por favor, responde de manera breve y concisa, limita la respuesta a 200 caracteres.`;
+      const response = await runChat(briefPrompt);
       const truncatedResponse =
-        response.length > 200
-          ? `${response.substring(0, 190)}... ¿Quieres saber más?`
-          : response;
+        response.length > 200 ? `${response.substring(0, 200)}...` : response;
+
       addMessage({ role: "assistant", content: truncatedResponse });
       setFullResponse(`\`\`\`javascript\n${truncatedResponse}\n\`\`\``);
 
       const additionalResponses: string[] = [];
       for (let i = 0; i < 3; i++) {
         const newNodeId = `node-${Date.now()}-${i}`;
-        const additionalResponse = await runChat(prompt + " related");
-        const truncatedAdditionalResponse =
-          additionalResponse.length > 200
-            ? `${additionalResponse.substring(0, 190)}... ¿Quieres saber más?`
-            : additionalResponse;
+        const additionalResponse = await runChat(`${prompt}\n\nNota: Genera una pregunta relacionada con el tema. No repitas la pregunta anterior ni su respuesta, solo la pregunta relacionada.`);
+        
+        additionalResponses.push(additionalResponse);
 
         addNode({
           id: newNodeId,
           type: "question",
           position: { x: 300, y: (i - 1) * 100 },
-          data: { label: truncatedAdditionalResponse },
+          data: { label: additionalResponse },
           parentId: nodeId,
         });
 
@@ -148,8 +164,6 @@ const useStore = create<Store>((set, get) => ({
           source: nodeId,
           target: newNodeId,
         });
-
-        additionalResponses.push(truncatedAdditionalResponse);
       }
 
       setSuggestions(additionalResponses);

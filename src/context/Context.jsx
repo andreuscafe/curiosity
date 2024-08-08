@@ -27,26 +27,20 @@ const ContextProvider = (props) => {
 
     const updatedHistory = [...prevPrompts, { role: "user", content: prompt }];
 
-    const briefPrompt = `${prompt}\n\nNota: Por favor, responde de manera breve y concisa, limitando la respuesta a 200 caracteres. Si necesitas más espacio, pregunta '¿Quieres saber más?' al final. No añadas "¿Queres saber más?" si la respuesta es corta.`;
-    const briefPrompt2 = `${prompt}\n\nNota2: Quiero que ademas de responderme, me des una explicacion de porque la respuesta es correcta o incorrecta. Si necesitas mas espacio, pregunta '¿Queres saber más?' al final. No añadas "¿Queres saber más?" si la respuesta es corta.`;
-    let responses = [];
+    const briefPrompt = `${prompt}\n\nNota: Por favor, responde de manera breve y concisa, limitando la respuesta a 200 caracteres.`;
+    const questionPrompt = `${prompt}\n\nNota:  Genera una pregunta relacionada con el tema sin repetir la pregunta original. Evita el uso de # y comentar *pregunta relacionada*`;
 
     try {
       // respuesta original
-      let response = await runChat(briefPrompt,briefPrompt2, updatedHistory);
+      let response = await runChat(briefPrompt, updatedHistory);
       console.log("Response from runChat:", response);
 
       if (typeof response === "string") {
-        if (response.length > 200) {
-          response = response.substring(0, 190) + "... ¿Queres saber más?";
-        } else if (response.length > 190) {
-          response += " ¿Quieres saber más?";
-        }
-
-        setFullResponse(`\`\`\`javascript\n${response}\n\`\`\``);
-        setResultData(response);
-        responses.push(response);
-        updatedHistory.push({ role: "assistant", content: response });
+        const truncatedResponse =
+          response.length > 200 ? `${response.substring(0, 200)}...` : response;
+        setFullResponse(truncatedResponse);
+        setResultData(truncatedResponse);
+        updatedHistory.push({ role: "assistant", content: truncatedResponse });
       } else {
         console.error("Unexpected response format:", response);
         setResultData("No response");
@@ -58,22 +52,18 @@ const ContextProvider = (props) => {
       // respuestas adicionales
       let additionalResponses = [];
       for (let i = 0; i < 3; i++) {
-        let additionalResponse = await runChat(briefPrompt, updatedHistory);
+        let additionalResponse = await runChat(questionPrompt, updatedHistory);
         console.log(`Additional response ${i + 1}:`, additionalResponse);
 
         if (typeof additionalResponse === "string") {
-          if (additionalResponse.length > 300) {
-            additionalResponse =
-              additionalResponse.substring(0, 290) + "... ¿Queres saber más?";
-          } else if (additionalResponse.length > 290) {
-            additionalResponse += " ¿Queres saber más?";
+          const relatedQuestion = additionalResponse.match(/.*\?$/m);
+          if (relatedQuestion) {
+            additionalResponses.push(relatedQuestion[0]);
+            updatedHistory.push({
+              role: "assistant",
+              content: relatedQuestion[0],
+            });
           }
-
-          additionalResponses.push(additionalResponse);
-          updatedHistory.push({
-            role: "assistant",
-            content: additionalResponse,
-          });
         } else {
           console.error("Unexpected response format:", additionalResponse);
           return [];
@@ -81,7 +71,7 @@ const ContextProvider = (props) => {
       }
 
       setSuggestions(additionalResponses);
-      return [response, ...additionalResponses];
+      return additionalResponses;
     } catch (error) {
       console.error("Error occurred in onSent:", error);
       setResultData("An error occurred while fetching the response.");

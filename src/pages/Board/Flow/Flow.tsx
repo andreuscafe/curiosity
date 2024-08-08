@@ -3,8 +3,8 @@ import ReactFlow, {
   MiniMap,
   Controls,
   Background,
-  Edge,
   OnConnect,
+  ReactFlowProvider,
 } from "reactflow";
 import "reactflow/dist/style.css";
 import "tailwindcss/tailwind.css";
@@ -37,8 +37,12 @@ const Flow = () => {
         edges.some((edge) => edge.source === source && edge.target === target);
 
       if (!nodeExists("node-1")) {
-        console.log(addNode)
-        addNode({ id: "node-1", type: "prompt", position: { x: 0, y: 0 }, data: { label: "Node 1" } });
+        addNode({
+          id: "node-1",
+          type: "prompt",
+          position: { x: 0, y: 0 },
+          data: { label: "Node 1" },
+        });
       }
       if (!edgeExists("node-1", "node-2")) {
         addEdge({ id: "edge-1", source: "node-1", target: "node-2" });
@@ -49,28 +53,30 @@ const Flow = () => {
   }, [addEdge, addNode, nodes, edges]);
 
   return (
-    <div className="w-screen h-screen bg-[#181818] text-white">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect as OnConnect}
-        nodeTypes={nodeTypes}
-        fitView
-        fitViewOptions={{
-          padding: 1.5,
-        }}
-      >
-        <MiniMap
-          nodeColor={() => "#242424"}
-          nodeStrokeWidth={3}
-          maskColor="#181818"
-          className="bg-black"
-        />
-        <Controls />
-        <Background color="#666" gap={24} />
-      </ReactFlow>
+    <div className="relative w-screen h-screen bg-[#181818] text-white">
+      <ReactFlowProvider>
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onConnect={onConnect as OnConnect}
+          nodeTypes={nodeTypes}
+          fitView
+          fitViewOptions={{
+            padding: 1.5,
+          }}
+        >
+          <MiniMap
+            nodeColor={() => "#262626"}
+            nodeStrokeWidth={3}
+            maskColor="#181818"
+            className="bg-[#181818]"
+          />
+          <Controls />
+          <Background color="#666" gap={24} />
+        </ReactFlow>
+      </ReactFlowProvider>
     </div>
   );
 };

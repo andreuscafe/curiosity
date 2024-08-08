@@ -18,7 +18,7 @@ const PromptNode = ({ id, data }: PromptNodeProps) => {
   const [isCompleted, setIsCompleted] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const [emoji, setEmoji] = useState<string>("✨");
-  const { onSent, nodes } = useStore();
+  const { onSent, nodes, updateNodeLabel } = useStore();
 
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
@@ -48,6 +48,7 @@ const PromptNode = ({ id, data }: PromptNodeProps) => {
       setIsThinking(false);
       setIsCompleted(true);
       setEmoji("✅");
+      updateNodeLabel(id, text);
     }
   };
 

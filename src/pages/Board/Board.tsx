@@ -8,7 +8,7 @@ const Board = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="">
+    <div className="relative">
       <Navbar openModal={() => setIsOpen(true)} />
       <Flow />
 
